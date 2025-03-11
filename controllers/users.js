@@ -34,24 +34,13 @@ module.exports.getUsersId = (req, res, next) => {
 };
 
 module.exports.updateUsers = (req, res, next) => {
-  const { name, typeUser } = req.body;
+  const { name, userImage } = req.body;
+  console.log(userImage);
   user
     .findByIdAndUpdate(
       req.user._id,
-      { name, typeUser },
+      { name, userImage },
       { returnDocument: "after", runValidators: true, new: true }
-    )
-    .then((user) => res.send(user))
-    .catch(next);
-};
-
-module.exports.updateUserImage = (req, res, next) => {
-  const { userImage } = req.body;
-  user
-    .findByIdAndUpdate(
-      req.user._id,
-      { userImage },
-      { returnDocument: "after", runValidators: true }
     )
     .then((user) => res.send(user))
     .catch(next);
@@ -83,15 +72,17 @@ module.exports.signUpUsers = (req, res) => {
 };
 
 module.exports.login = (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, rememberMe } = req.body;
   return user
     .findUserByCredentials(email, password)
     .then((user) => {
+      const expiresIn = rememberMe ? "30d" : "7d";
+
       const token = jwt.sign(
         { _id: user._id },
         NODE_ENV === "production" ? JWT_SECRET : "super-strong-secret",
         {
-          expiresIn: "7d",
+          expiresIn: expiresIn,
         }
       );
 

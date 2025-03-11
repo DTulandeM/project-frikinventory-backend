@@ -20,16 +20,8 @@ module.exports.getProducts = (req, res) => {
     });
 };
 module.exports.createProducts = (req, res) => {
-  const {
-    name,
-    image,
-    price,
-    quantity,
-    buyCost,
-    sellCost,
-    typeOfProduct,
-    articuleRef,
-  } = req.body;
+  const { name, image, price, quantity, buyCost, typeOfProduct, articuleRef } =
+    req.body;
   const owner = req.user._id;
   product
     .create({
@@ -39,7 +31,6 @@ module.exports.createProducts = (req, res) => {
       quantity,
       owner,
       buyCost,
-      sellCost,
       typeOfProduct,
       articuleRef,
     })
@@ -48,7 +39,7 @@ module.exports.createProducts = (req, res) => {
     .catch((err) => {
       if (err.name === "ValidationError") {
         return res.status(ERROR_CODE.BAD_REQUEST).send({
-          message: "Los datos no son suficientes para crear un producto" + err,
+          message: "Los datos no son suficientes para crear un producto",
         });
       }
       res
@@ -58,9 +49,10 @@ module.exports.createProducts = (req, res) => {
 };
 
 module.exports.deleteProduct = (req, res) => {
-  const { productId } = req.params;
+  const { _id } = req.params;
+  console.log(_id);
   product
-    .findByIdAndDelete(productId)
+    .findByIdAndDelete(_id)
     .orFail(() => {
       const error = new Error("No se ha encontrado un producto con esa id");
       error.statusCode = ERROR_CODE.NOT_FOUND;
@@ -69,43 +61,43 @@ module.exports.deleteProduct = (req, res) => {
     .then(() => {
       return res.send({ message: "Producto eliminado con exito" });
     })
-    .then((product) => {
-      if (!product) {
-        return res.status(ERROR_CODE.NOT_FOUND).send({
-          message: "Producto no encontrado",
-        });
+    .catch((error) => {
+      if (error.statusCode === ERROR_CODE.NOT_FOUND) {
+        return res
+          .status(ERROR_CODE.NOT_FOUND)
+          .send({ message: error.message });
       }
-      res.send(product);
-    })
-    .catch((err) => {
-      res
+      if (error.name === "CastError") {
+        return res
+          .status(ERROR_CODE.BAD_REQUEST)
+          .send({ message: "ID de carta no válido" });
+      }
+      return res
         .status(ERROR_CODE.INTERNAL_SERVER)
         .send({ message: "Error del servidor" });
     });
 };
 
 module.exports.updateProduct = (req, res) => {
-  const { productId } = req.params;
   const {
+    id,
     name,
     image,
     price,
     quantity,
     buyCost,
-    sellCost,
     typeOfProduct,
     articuleRef,
   } = req.body;
   product
     .findByIdAndUpdate(
-      productId,
+      id,
       {
         name,
         image,
         price,
         quantity,
         buyCost,
-        sellCost,
         typeOfProduct,
         articuleRef,
       },

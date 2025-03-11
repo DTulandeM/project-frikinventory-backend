@@ -31,6 +31,7 @@ const userSchema = new mongoose.Schema({
       message: (props) => `${props.value} No es una URL valida!`,
     },
   },
+
   email: {
     type: String,
     unique: true,

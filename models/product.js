@@ -40,10 +40,7 @@ const productSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  sellCost: {
-    type: Number,
-    required: true,
-  },
+
   typeOfProduct: {
     type: String,
     required: true,

@@ -8,7 +8,6 @@ const {
   updateUsers,
   updateUserImage,
 } = require("../controllers/users.js");
-
 router.get(
   "/me",
   celebrate({
@@ -35,8 +34,9 @@ router.post(
       }),
       password: Joi.string().required().min(8).messages({
         "string.empty": "La contraseña es obligatoria.",
-        "string.min": "La contraseña debe tener al menos 6 caracteres.",
+        "string.min": "La contraseña debe tener al menos 8 caracteres.",
       }),
+      rememberMe: Joi.boolean().optional(),
     }),
   }),
   login
@@ -53,18 +53,12 @@ router.patch(
         "string.max":
           "Nombre no cumple con la longitud requerida, máximo 30 caracteres",
       }),
-      about: Joi.string().required().min(2).max(30).messages({
-        "string.empty": "El nombre es obligatorio.",
-        "string.min":
-          "About no cumple con la longitud requerida, mínimo 6 caracteres",
-        "string.max":
-          "About no cumple con la longitud requerida, máximo 30 caracteres",
+      userImage: Joi.string().required().messages({
+        "string.empty": "El url es obligatorio.",
       }),
     }),
   }),
   updateUsers
 );
-
-router.patch("/me/userimage", updateUserImage);
 
 module.exports = router;

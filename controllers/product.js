@@ -50,7 +50,6 @@ module.exports.createProducts = (req, res) => {
 
 module.exports.deleteProduct = (req, res) => {
   const { _id } = req.params;
-  console.log(_id);
   product
     .findByIdAndDelete(_id)
     .orFail(() => {

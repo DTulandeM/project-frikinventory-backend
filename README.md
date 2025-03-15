@@ -22,3 +22,6 @@ Productos
 4. Recuperar todas los productos o una especifico por su ID.
 
 Las tecnologias empleadas son Nodejs, express, mongoose, MongoDB, gitHub, javaScripts, PM2 y ngnx
+
+Repositorio en Github:
+https://github.com/DTulandeM/project-frikinventory-backend.git

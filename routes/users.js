@@ -22,7 +22,22 @@ router.get(
   getUsersId
 );
 
-router.post("/signup", signUpUsers);
+router.post(
+  "/signup",
+  celebrate({
+    [Segments.BODY]: Joi.object().keys({
+      email: Joi.string().required().email().messages({
+        "string.empty": "El email es obligatorio.",
+        "string.email": "Debe ser un email válido.",
+      }),
+      password: Joi.string().required().min(8).messages({
+        "string.empty": "La contraseña es obligatoria.",
+        "string.min": "La contraseña debe tener al menos 6 caracteres.",
+      }),
+    }),
+  }),
+  signUpUsers
+);
 
 router.post(
   "/signin",

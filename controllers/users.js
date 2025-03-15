@@ -35,7 +35,6 @@ module.exports.getUsersId = (req, res, next) => {
 
 module.exports.updateUsers = (req, res, next) => {
   const { name, userImage } = req.body;
-  console.log(userImage);
   user
     .findByIdAndUpdate(
       req.user._id,
@@ -47,6 +46,7 @@ module.exports.updateUsers = (req, res, next) => {
 };
 
 module.exports.signUpUsers = (req, res) => {
+  console.log(req.body.password);
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) =>

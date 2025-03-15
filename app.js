@@ -70,6 +70,8 @@ app.use((err, req, res, next) => {
     message:
       statusCode === 500 ? "Se ha producido un error en el servidor" : message,
   });
+
+  next();
 });
 
 app.listen(PORT, () => {
